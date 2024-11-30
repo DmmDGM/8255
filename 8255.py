@@ -165,14 +165,14 @@ string_sub_regex = re.compile(r"(\$\w+)")
 # Handle loading file
 def process_file(filepath: Path) -> None:
     file_lines = [
-        line.strip() for line in filepath.read_text().splitlines()
+        line.split("//")[0].strip() for line in filepath.read_text().splitlines()
         if line.strip()
     ]
 
     # Locate directives and process them
     blocked, last_line, file_size, line_data, labels = False, 0, 8192, [], {}
     for index, line in enumerate(file_lines):
-        line = re.findall(line_regex, line.split("//")[0])
+        line = re.findall(line_regex, line)
         if line == ["."]:
             if not blocked:
                 raise SyntaxError("cannot use . directive without active code block")
@@ -319,6 +319,9 @@ def process_file(filepath: Path) -> None:
 
                 case ["drp", variable]:
                     buffer.drop_variable(handle_variable(variable))
+
+                case ["set", variable, value]:
+                    buffer.write_variable(handle_variable(variable), process_value(value))
 
                 case _ as default:
                     raise SyntaxError(default)
