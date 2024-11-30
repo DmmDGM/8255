@@ -14,7 +14,7 @@ A programming language.
 ```bash
 git clone git@github.com:iiPythonx/8255
 cd 8255
-python3 8255.py SOME_FILE.8255
+python3 -m 8255 SOME_FILE.8255
 ```
 
 ## Syntax
@@ -26,8 +26,8 @@ PROGRAM "Program Name"              // Optional, to be used later
 SIZE 8K BINARY                      // Give this program a 8192 byte stack to work with
 START                               // Required for execution to begin
   010   out "Hello, world."         // Basic print to the screen
-  020   alc &something :[1]         // Allocate 1 byte to the "something" variable
-  030   set &something 251          // Put the number 251 into the "something" variable
+  020   alc &something :[1]         // Allocate 1 byte to the "something" register
+  030   set &something 251          // Put the number 251 into the "something" register
   040   out "Number: $something."   // Write the number to the screen
 .                                   // Stop execution, not required
 ```
@@ -47,9 +47,9 @@ The language has no set tab or spacing rules, it is up to you to implement spaci
 ## Reserved registers
 
 ```js
-&SLX    // ERROR CODE OF LAST RAN LINE, 0 IF SUCCESS
-&SLY    // RESERVED
-&SLZ    // RESERVED
+&slx    // ERROR CODE OF LAST RAN LINE, 0 IF SUCCESS
+&sly    // RESERVED
+&slz    // RESERVED
 ```
 
 ## Inspiration
