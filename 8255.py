@@ -97,8 +97,7 @@ class Buffer:
         if allocation.end - 1 > self.size:
             raise OverflowError(f"requested value {repr(value)} ({len(serialized_value)} bytes) exceeds buffer size of {self.size} bytes")
 
-        for index, value in enumerate(serialized_value):
-            self.store[index + allocation.start] = value
+        self.store[allocation.start:allocation.end + 1] = serialized_value
 
     def get(self, allocation: Allocation, cast: DataType) -> str | int:
         value = self.store[allocation.start:allocation.end + 1]
