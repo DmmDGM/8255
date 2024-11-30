@@ -32,9 +32,10 @@ def process_lines(lines: list[str]) -> list[list[str]]:
     return processed_lines
 
 def construct_program(lines: list[str]) -> Program:
+    processed_lines = process_lines(lines)
     program = {"name": None, "byte_size": 8192, "lines": [], "labels": {}}
     in_code_block, last_line = False, 0
-    for index, line in enumerate(process_lines(lines)):
+    for index, line in enumerate(processed_lines):
         match line:
             case ["START"] if not in_code_block:
                 pass
@@ -56,14 +57,14 @@ def construct_program(lines: list[str]) -> Program:
                 if not in_code_block:
                     raise SyntaxError("cannot use . directive without active code block")
 
-                if index != len(lines) - 1:
+                if index != len(processed_lines) - 1:
                     raise SyntaxError("the . directive must be at end of file")
 
             case [line_number, *code_line]:
                 if not line_number.isnumeric():
                     raise SyntaxError("cannot have a directive inside the code block")
 
-                if lines[index - 1] != "START" and not in_code_block:
+                if processed_lines[index - 1] != ["START"] and not in_code_block:
                     raise SyntaxError("cannot begin code block without START directive")
 
                 # Check line numbers add up
