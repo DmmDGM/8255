@@ -40,7 +40,7 @@ def process_file(filepath: Path) -> None:
         for variable in re.findall(string_sub_regex, value):
             value = value.replace(variable, str(stack.get_variable(variable[1:])))
 
-        return value
+        return value.encode("latin-1", "backslashreplace").decode("unicode-escape")
 
     def handle_variable(variable: str, regex: re.Pattern = variable_regex) -> str:
         variable_match = re.match(regex, variable)
@@ -60,6 +60,9 @@ def process_file(filepath: Path) -> None:
                 case ["lbl", _]:
                     pass
 
+                case ["cls"]:
+                    print("\033[2J")
+            
                 case ["alc", variable, allocation]:
                     stack.allocate_variable(
                         handle_variable(variable),
