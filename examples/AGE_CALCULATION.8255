@@ -1,0 +1,10 @@
+PROGRAM "Age and Birth Year Calculation"
+START
+  010   alc &age :[3]                  // Allocate 3 bytes from the stack
+  020   inp "Age: " > &age             // Grab age from user and store it
+  030   cst &age INTEGER               // Cast "age" into an INTEGER
+  040   alc &born :[4]                 // Allocate 4 bytes from the stack
+  050   sub 2024 &age > &born          // Subtract age from 2024 and store it
+  060   cst &born STRING               // Cast "born" into a STRING
+  070   out "You were born in $born."  // Give the user their birth year
+.

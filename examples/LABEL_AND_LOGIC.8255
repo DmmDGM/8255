@@ -1,0 +1,16 @@
+PROGRAM "Label and Logic Demonstration"
+SIZE 1K DECIMAL
+START
+  010   out "Let the testing begin."   // Basic begin message
+  020   lbl ask_age                    // Setup a label called "ask_age"
+  030   alc &age :[3]                  // Allocate 3 bytes from the stack
+  040   inp "Age: " > &age             // Grab age from user and store it
+  050   cst &age INTEGER               // Cast "age" into an INTEGER
+  060   cmp &slx 0                     // Compare the SLX register to 0
+  070   jeq got_age                    // If equal, jump to "got_age"
+  080   jnq ask_age                    // If not equal, jump to "ask_age"
+  090   lbl got_age                    // Setup a label called "got_age"
+  100   cst &age STRING                // Cast "age" into a STRING
+  110   out "Age is $age."             // Tell the user their age
+  120   drp $age                       // Drop "age", freeing the memory
+.
