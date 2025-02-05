@@ -2,11 +2,11 @@
 
 # Modules
 import re
-import sys
 import operator
 from pathlib import Path
+from argparse import ArgumentParser
 
-from .stack import Stack, StackError
+from .stack import NullDataInOperation, Stack, StackError
 from .construct import construct_program
 
 # Regex assignments
@@ -15,7 +15,7 @@ allocation_regex = re.compile(r":\[(\d+)\]")
 string_sub_regex = re.compile(r"(\$\w+)")
 
 # Handle loading file
-def process_file(filepath: Path) -> None:
+def process_file(filepath: Path, debug: bool = False) -> None:
     file_lines = [line.strip() for line in filepath.read_text().splitlines() if line.strip()]
 
     # Initialize
@@ -52,6 +52,25 @@ def process_file(filepath: Path) -> None:
     # Handle iteration
     current_line, comparison_result = 0, None
     while current_line <= len(program.lines) - 1:
+        if debug:
+            print(f"\033[2J\033[H\033[32m[Execute] {' '.join(program.lines[current_line])}\033[0m")
+            for name, register in stack.vars.items():
+                value = getattr(register, "value", None)
+                if value is None:
+                    try:
+                        value = stack.get_variable(name)
+
+                    except NullDataInOperation:
+                        value = None
+
+                print(f"\033[90m\t[{name}] {value}\033[0m")
+
+            print("\n\033[90m[Stepped]")
+            for line in program.lines[:current_line]:
+                print(f"\t{' '.join(line)}")
+
+            input("\n\033[33mPress [ENTER] to step.\033[0m")
+
         try:
             match program.lines[current_line]:
                 case ["out", message]:
@@ -140,4 +159,8 @@ def process_file(filepath: Path) -> None:
         current_line += 1
 
 if __name__ == "__main__":
-    process_file(Path(sys.argv[1]))
+    shell = ArgumentParser(prog = "8255", description = "A programming language.", epilog = "(c) 2024-2025 iiPython")
+    shell.add_argument("filepath", type = Path)
+    shell.add_argument("-d", "--debug", action = "store_true")
+    args = shell.parse_args()
+    process_file(args.filepath, args.debug)
