@@ -65,7 +65,7 @@ class Stack:
 
     def serialize(self, value: str | int, size: int) -> list[int]:
         if isinstance(value, int):
-            return list(value.to_bytes(size))
+            return list(value.to_bytes(size, signed = True))
 
         string_value = list(value.encode("ascii"))
         return string_value + [0] * (size - len(string_value))
@@ -104,7 +104,7 @@ class Stack:
 
         match cast:
             case DataType.INTEGER:
-                return int.from_bytes(bytes(value))  # type: ignore | Handled by the any() check above
+                return int.from_bytes(bytes(value), signed = True)  # type: ignore | Handled by the any() check above
 
             case DataType.STRING:
                 return bytes(v for v in value if v).decode("ascii")  # type: ignore | Handled by the any() check above
@@ -159,4 +159,3 @@ class Stack:
 
         self.drop(self.vars[name].allocation)  # pyright: ignore
         del self.vars[name]
-

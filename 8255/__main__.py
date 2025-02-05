@@ -30,7 +30,7 @@ def process_file(filepath: Path, debug: bool = False) -> None:
 
             return stack.get_variable(value[1:])
 
-        if value.isnumeric():
+        if value.lstrip("-").isnumeric():
             return int(value)
 
         if not (value[0] == "\"" and value[-1] == "\"" and len(value) > 1):
