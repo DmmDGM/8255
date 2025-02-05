@@ -30,6 +30,8 @@ class MemoryOverflow(StackError):
     pass
 
 # Typing
+ALLOCATED = b"\x00"  # Might change eventually
+
 class DataType(Enum):
     INTEGER = 1
     STRING  = 2
@@ -59,7 +61,7 @@ class Stack:
             "sly": ReservedRegister(0),
             "slz": ReservedRegister(0),
         }
-        self.store: list[None | int] = [None] * size
+        self.store: list[None | int | bytes] = [None] * size
 
     def serialize(self, value: str | int, size: int) -> list[int]:
         if isinstance(value, int):
@@ -77,6 +79,7 @@ class Stack:
 
                 count += 1
                 if count == size:
+                    self.store[start_index:start_index + size] = [ALLOCATED] * size
                     return Allocation(start_index, start_index + size - 1, size)
 
             else:
@@ -155,3 +158,5 @@ class Stack:
             raise ReservedName(name)
 
         self.drop(self.vars[name].allocation)  # pyright: ignore
+        del self.vars[name]
+
