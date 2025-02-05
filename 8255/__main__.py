@@ -132,7 +132,7 @@ def process_file(filepath: Path, debug: bool = False) -> None:
                     elif variable1 <= variable2:  # type: ignore | Checked above
                         comparison_result = "jle"
 
-                case ["jeq" | "jnq" | "jgt" | "jlt" | "jge" | "jle" as jump_type, label]:
+                case ["jeq" | "jne" | "jgt" | "jlt" | "jge" | "jle" as jump_type, label]:
                     if comparison_result == jump_type:
                         current_line = program.labels[label]
                         continue
