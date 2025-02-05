@@ -79,6 +79,9 @@ def process_file(filepath: Path, debug: bool = False) -> None:
                 case ["lbl", _]:
                     pass
 
+                case ["ext", code]:
+                    exit(process_value(code))
+
                 case ["cls"]:
                     print("\033[2J")
             
@@ -147,7 +150,7 @@ def process_file(filepath: Path, debug: bool = False) -> None:
                     raise SyntaxError(default)
 
         except Exception as e:
-            if isinstance(e, StackError):
+            if isinstance(e, (StackError, SyntaxError)):
                 raise e
 
             slx_code = 1
