@@ -121,7 +121,7 @@ def process_file(filepath: Path) -> None:
                 case ["drp", variable]:
                     stack.drop_variable(handle_variable(variable))
 
-                case ["set", variable, value]:
+                case [value, ">", variable]:
                     stack.write_variable(handle_variable(variable), process_value(value))
 
                 case _ as default:
