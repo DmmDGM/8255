@@ -68,8 +68,8 @@ def construct_program(lines: list[str]) -> Program:
                     raise SyntaxError("cannot begin code block without START directive")
 
                 # Check line numbers add up
-                if int(line_number) != last_line + 10:
-                    raise SyntaxError("line numbers must be multiples of 10")
+                if int(line_number) <= last_line or int(line_number) % 10:
+                    raise SyntaxError("line numbers must be increasing in multiples of 10")
 
                 last_line = int(line_number)
 
