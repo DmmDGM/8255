@@ -83,7 +83,7 @@ def process_file(filepath: Path, debug: bool = False) -> None:
                     exit(process_value(code))
 
                 case ["cls"]:
-                    print("\033[2J")
+                    print("\033[2J\033[H", end = "", flush = True)
             
                 case ["alc", variable, allocation]:
                     stack.allocate_variable(
